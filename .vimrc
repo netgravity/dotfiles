@@ -31,7 +31,7 @@ Plugin 'altercation/vim-colors-solarized' "colorscheme
 Plugin 'scrooloose/nerdtree'
 Plugin 'tpope/vim-fugitive'  " vim integration
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'} " status bar files edited, git branch, virtualenv
-
+Plugin 'vimwiki'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
@@ -47,7 +47,7 @@ let mapleader = ","
 
 " Vim Wiki
 let g:vimwiki_list = [{'path': '~/Sync/wiki/', 'syntax': 'markdown'}]
-
+au FileType vimwiki setlocal shiftwidth=6 tabstop=6 noexpandtab
 
 " PEP8 indentation standards
 au BufNewFile,BufRead *.py
