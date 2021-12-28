@@ -1,11 +1,16 @@
+
 set number
 set incsearch
 set hlsearch
 set list
+set listchars=tab:\ \ ,eol:$,trail:⋅
+set tabstop=2 shiftwidth=2 expandtab
 set background=dark
 " colorscheme molokai
 set backspace=indent,eol,start
-
+set termguicolors
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 set nocompatible              " be iMproved, required vundle
 filetype off                  " required vundle
 
@@ -25,16 +30,21 @@ Plugin 'davidhalter/jedi-vim'
 " Plugin 'valloric/youcompleteme'
 Plugin 'vim-syntastic/syntastic' " python syntax checking on each save
 Plugin 'nvie/vim-flake8' " check pep8 standards
-
+Plugin 'w0rp/ale'
 Plugin 'jnurmine/Zenburn' " colorscheme
 Plugin 'altercation/vim-colors-solarized' "colorscheme
 Plugin 'scrooloose/nerdtree'
-Plugin 'tpope/vim-fugitive'  " vim integration
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'} " status bar files edited, git branch, virtualenv
 Plugin 'vimwiki'
+Plugin 'Yggdroot/indentLine' " https://www.arthurkoziel.com/setting-up-vim-for-yaml/ , indent for yaml
+Plugin 'chrisbra/unicode.vim' " for any unicode character--> insert mode, c-v,  :SearchUnicode
+Plugin 'bluz71/vim-nightfly-guicolors'
 
 call vundle#end()            " required
 filetype plugin indent on    " required
+
+" Vimscript initialization file
+colorscheme nightfly
 
 " Enable folding
 set foldmethod=indent
@@ -59,6 +69,31 @@ au BufNewFile,BufRead *.py
     \ set autoindent
     \ set fileformat=unixi
 
+
+"""" Ale settings
+
+" Check Python files with flake8 and pylint.
+let g:ale_linters = {'python': ['flake8', 'pylint']}
+" Fix Python files with autopep8 and yapf.
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'python': ['autopep8', 'black']
+\}
+
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_error = '✘'
+" Set this variable to 1 to fix files when you save them.
+let g:ale_fix_on_save = 1
+
+""""" end Ale Settings
+""" start yaml settings
+
+autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+"let g:indentLine_char = '|'
+
+
+""" end yaml settings
+
 " for full stack indentation
 au BufNewFile,BufRead *.js, *.html, *.css
     \ set tabstop=2
@@ -72,13 +107,20 @@ set encoding=utf-8
 let python_highlight_all=1
 syntax on
 
+set t_Co=256 " required for zenburn color mode
 " set colorscheme based on mode
 if has('gui_running')
+	  set background=light
+	  colorscheme solarized
+else
+	  colorscheme zenburn
 	  set background=dark
-	    colorscheme solarized
-    else
-	      colorscheme zenburn
-      endif
+ endif
+
+
+colorscheme nightfly
+let g:lightline = { 'colorscheme': 'nightfly' }
+" Vimscript initialization file
+let g:moonflyIgnoreDefaultColors = 1
 
 call togglebg#map("<F5>")
-
